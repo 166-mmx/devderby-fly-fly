@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>History API</title>
+<link href='reset.css' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=VT323' rel='stylesheet' type='text/css'>
+<style>
+html, body {
+	font-family: Tahoma;
+	font-size:11px;
+}
+
+#header {
+	float:left;
+	background:rgba(255,255,255,0.1);
+	padding:15px;
+	font-family:'VT323', Tahoma;
+	font-size:12px;
+	max-width:400px;
+}
+
+h1 {
+	font-size: 26px;
+	font-weight:bold;
+	margin-bottom:5px;
+}
+
+h2 {
+	font-size:18px;
+	font-weight: bold;
+	margin-bottom:5px;
+}
+
+h3 {
+	font-size: 16px;
+	font-weight:bold;
+	padding-bottom:7px;
+	font-family:'VT323', Tahoma;
+}
+
+.nyan {
+	background: #003366;
+	color: white;
+}
+
+.plane {
+	background: #4997D0;
+	color:#f0f0ff;
+}
+
+.deleted {
+	color:#999;
+	cursor: default !important;
+}
+
+#flexbox {
+	display: -webkit-box;
+	-webkit-box-orient: horizontal;
+	
+	display: -moz-box;
+	-moz-box-orient: horizontal;
+	display: box;
+	box-orient: horizontal;
+	width:100%;
+}
+
+#history {
+	width:280px;
+	background: rgba(255,255,255,0.1);
+	padding:20px 10px 10px 15px;
+	position:relative;
+}
+
+#history .desc {
+	background: rgba(255,255,255,0.2);
+	padding:10px 15px;
+	text-align:justify;
+	margin-bottom:2px;
+}
+
+#history div:not(.desc) {
+	padding: 3px 5px 3px;
+	cursor:pointer;
+}
+
+#history div:not(.desc):hover {
+	background:rgba(255,255,255,0.1);
+}
+
+#history .desc a {
+	display:block;
+	padding: 3px 0px 5px;
+}
+
+.nyan #history .desc a {
+	color: white;
+	
+}
+
+.nyan #header a {
+	color:white;
+}
+
+.plane #history .desc a {
+	color: #f0f0ff;
+	
+}
+
+.plane #header a {
+	color: #f0f0ff;
+}
+
+#header p {
+	padding-bottom:3px;
+	font-size:12px;
+}
+
+#history div span {
+	opacity:0;
+	transition-property: opacity;
+  	transition-duration: 1s;
+  	-moz-transition-property: opacity;
+  	-moz-transition-duration: 1s;
+  	-webkit-transition-property: opacity;
+  	-webkit-transition-duration: 1s;
+  	-o-transition-property: opacity;
+  	-o-transition-duration: 1s;
+  	float:right;
+  	border:solid 1px #fff;
+  	height:13px;
+  	width:13px;
+  	text-align:center;
+  	background: rgba(255,255,255,0.2);
+  	line-height:100%;
+  	display:block;
+}
+
+.nyan #history {
+	background-color: #194775;
+}
+
+.plane #history {
+	background-color: #5aa1d4;
+}
+
+#history div:hover span {
+	opacity:1;
+}
+
+#history div.deleted span {
+	opacity:0 !important;
+}
+
+#map-container {	
+	-webkit-box-flex: 1;
+	-moz-box-flex: 1;
+	box-flex: 1;
+	height:600px;
+	padding:20px;
+}
+
+#map {
+	width: 100%;
+	height: 600px;
+	position:relative;
+}
+
+#map-bg-container {
+	position:absolute;
+}
+
+.plane #map-bg-container {
+	position:absolute;
+	background-image: url(clouds.gif);
+}
+
+.map-bg {
+	height: 41px;
+	width:100%;
+	margin-bottom:19px;
+	background-repeat: repeat-x;
+}
+
+.map-bg-1 {
+	background: url(star-1.png);
+}
+
+.map-bg-2 {
+	background: url(star-2.png);
+}
+
+.map-bg-3 {
+	background: url(star-3.png);
+}
+
+.map-bg-4 {
+	background: url(star-4.png);
+}
+
+.map-bg-5 {
+	background: url(star-5.png);
+}
+
+#tooltip {
+	position:absolute;
+	/*min-width:100px;*/
+	padding:5px 10px;
+	border-radius:10px;
+	
+	opacity:0px;
+	left:-300px;
+	top:-300px;
+	color: black;
+	background:#ccc;
+}
+
+.nyan #tooltip {
+	color: white;
+	background:#003366;
+	border: solid 2px rgb(255,255,255);
+}
+
+.plane #tooltip {
+	color: white;
+	background:#4997D0;
+	border: solid 2px rgb(255,255,255);
+}
+
+.desc {
+	display:none;
+}
+
+#dialog {
+	width:350px;
+	background: black;
+	color:white;
+	position:absolute;
+	top:200px;
+	left:50%;
+	margin-left:-195px;
+	text-align:center;
+	padding:20px;
+	border-radius: 20px;
+	font-family:'VT323', Tahoma;
+	z-index:1024;
+}
+
+#dialog p {
+	font-size:16px;
+	
+	padding-bottom:20px;
+}
+
+#dialog a {
+	display:block;
+	width:150px;
+	float:left;
+	margin: 0px 12px 0px 13px;
+	text-decoration: none;
+	color: #f0f0ff;
+	font-size:14px;
+	background: rgba(255,255,255,0.1);
+	padding:10px 0px 10px;
+	border-radius:10px;
+}
+
+#dialog a:hover {
+	background: rgba(255,255,255,0.3);
+}
+
+#layer {
+	background: rgba(0,0,0,0.5);
+	width:100%;
+	height:100%;
+	position:absolute;
+	top:0px;
+	left:0px;
+	z-index:1023;
+}
+
+#loading {
+	text-align:center;
+	font-size:18px;
+	padding-top:130px;
+}
+
+#tip {
+	display:none;
+	font-size:20px;
+	font-weight:bold;
+	padding:20px;
+	width:500px;
+	color:white;
+	font-family:'VT323', Tahoma;
+	background:rgba(0,0,0,0.5);
+	border-radius:15px;
+	position:absolute;
+	top:25px;
+	text-align:center;
+	left:50%;
+	margin-left:-270px;
+	
+}
+
+</style>
+<style type="text/css">@import "jquery.svg.css";</style> 
+<script type="text/javascript" src="jq.js"></script>
+<script type="text/javascript" src="jquery.svg.pack.js"></script>
+<script type="text/javascript" src="jquery.color.js"></script>
+<script type="text/javascript" src="jquery.svganim.min.js"></script>
+<script type="text/javascript" src="data.js"></script>
+<script type="text/javascript" src="fly.js"></script>
+</head>
+<body>
+	<div id="map-bg-container">
+	</div>
+	
+	<div id="flexbox">
+		
+		<div id="map-container">
+			<div id="header">
+				<h1>Fly, fly!</h1>
+				<h2>Use NYAN CAT or airplane to visit cities.</h2>
+				<p>You can navigate also by 'back' and 'forward' buttons in your browser.</p>
+				<p>All data and photos of cities are provided by <a href="http://en.wikipedia.org/" onclick="window.open(this.href);return false;">Wikipedia</a>. Photos are licensed on Public Domain or CC license - check the link under photos for details.</p>
+				<p>Developed by <a href="http://michal.biniek.pl" onclick="window.open(this.href);return false;">Michal Biniek</a></p>  
+			</div>
+			<div style="clear:both;"></div>
+			<div id="map"><div id="loading">Loading map...</div></div>
+		</div>
+		<div id="history">
+			
+		</div>
+	</div>
+	
+	<div id="tooltip"></div>
+	<div id="layer"></div>
+	<div id="dialog">
+		<p>Choose version:</p>
+		<a href="#" onclick="setupPlane();return false;"><img src="plane.gif" alt="plane" /><br/>Plane (...so boring...)</a>
+		<a href="#" onclick="setupNyan();return false;"><img src="nyan.gif" style="height:51px;" alt="NYANCAT" /><br/>Nyan Cat!!! OMG!</a>
+		<div style="clear:both;"></div>
+	</div>
+	<div id="tip">Select first point</div>
+</body>
+</html>

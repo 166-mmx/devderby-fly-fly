@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script>
+	var regexp = /\/(.{3})\.html/ig;
+	document.cookie = 'startBase='+regexp.exec(document.location.href)[1] + '; path=/';
+	document.location = document.location.href.substr(0,document.location.href.length-13);
+</script>
+</head>
+<body>
+
+</body>
+</html>
